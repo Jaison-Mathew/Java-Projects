@@ -24,6 +24,7 @@ public class GroceryList {
         }
     }
 
+    //modifies item of the index that has the currentItem value in groceryList
     public void modifyGroceryItem(String currentItem, String newItem){
 
         int postion = finditem(currentItem);
@@ -32,7 +33,7 @@ public class GroceryList {
         }
     }
 
-    //modifies items in groceryList
+    //modifies item in the position index of groceryList
     private void modifyGroceryItem(int position, String groceryItem){
         groceryList.set(position, groceryItem);
         System.out.println("Grocery item " + (position + 1) + " has been modified");
