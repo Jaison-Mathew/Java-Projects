@@ -13,17 +13,23 @@ public class MobilePhone{
         phoneNumber.add(newNumber);
     }
 
-    //methods to check if contact is in the array list
+    //methods to check if name of contact is in the array list
     private int findItem(String searchItem){
         return name.indexOf(searchItem);
     }
 
     public boolean onList(String findItem){
         int position = findItem(findItem);
-        if (position >= 0){
+        int phoneNumPosition = findNumberItem(findItem);
+        if (position >= 0 || phoneNumPosition >= 0){
             return true;
         }
         return false;
+    }
+
+    //methods to check if phone number of contact is in the array list
+    private int findNumberItem(String searchNum){
+        return phoneNumber.indexOf(searchNum);
     }
 
     //method that prints contacts

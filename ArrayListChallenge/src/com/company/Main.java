@@ -67,8 +67,9 @@ public class Main {
         if (contact.onList(newName) || contact.onList(newNum)){
             System.out.println("Error! The name or number entered already exists in the list.");
             return;
+        }else {
+            contact.addContact(newName, newNum);
         }
-        contact.addContact(newName, newNum);
     }
 
     //removes existing contact
@@ -87,6 +88,10 @@ public class Main {
         }
         System.out.println("Enter replacement number (xxx-xxx-xxxx): ");
         String newContactName = scanner.nextLine();
+        if (contact.onList(newContactName) || contact.onList(contactName)){
+            System.out.println("Error, number exists in another contact.");
+            return;
+        }
         contact.modifyContact(contactName, newContactName);
     }
 
