@@ -4,29 +4,23 @@ public class Printer {
 
     private int tonerLevel;
     private int pagesPrinted;
-    private boolean isDuplexPrinter;
+    private boolean duplex;
 
-    public Printer(int tonerLevel, boolean isDuplexPrinter) {
+    public Printer(int tonerLevel, boolean duplex) {
         if (this.tonerLevel > -1 && this.tonerLevel <= 100){
             this.tonerLevel = tonerLevel;
         }else {
             this.tonerLevel = -1;
         }
         this.pagesPrinted = 0;
-        this.isDuplexPrinter = isDuplexPrinter;
+        this.duplex = duplex;
     }
 
-
-    public int getPagesPrinted() {
-        return pagesPrinted;
-    }
-
-    //create method to fill up the toner to 100%
-    public int fillToner(int addToner){
-
-        if (addToner > 0 && addToner <= 100){
-            if ((this.tonerLevel + addToner) <= 100){
-                this.tonerLevel += addToner;
+    //create method to add toner to the printer
+    public int addToner(int tonerAmount){
+        if (tonerAmount > 0 && tonerAmount <= 100){
+            if ((this.tonerLevel + tonerAmount) <= 100){
+                this.tonerLevel += tonerAmount;
                 return this.tonerLevel;
             }else {
                 return -1;
@@ -34,17 +28,28 @@ public class Printer {
         }else {
             return -1;
         }
-
     }
 
-    //create method to simulate printer
-    public int simulatePrinting(int pages){
-        int printPage = pages;
-        if (this.isDuplexPrinter = true){
-            this.pagesPrinted = (pages % 2) + (pages / 2);
+    //create method that prints pages and counts how many pages are printed in printer lifespan
+    public int printPages(int pages){
+        if (pages < 0){
+            return -1;
+        }
+
+        int pagesToPrint = pages;
+        if (this.duplex = true){
+            //calculates how many pages are being printed in duplex mode
+            pagesToPrint = (pages / 2) + (pages % 2);
             System.out.println("Printing in duplex mode");
         }
-        this.pagesPrinted += printPage;
-        return printPage;
+        //counts how many pages are being printed in printer lifespan
+        this.pagesPrinted += pagesToPrint;
+        return pagesToPrint;
     }
+
+    public int getPagesPrinted() {
+        return this.pagesPrinted;
+    }
+
+
 }
