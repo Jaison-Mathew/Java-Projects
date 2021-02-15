@@ -1,5 +1,9 @@
 package com.timbuchalka;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -18,5 +22,48 @@ public class Main {
             System.out.println("Sorry, seat is taken");
         }
 
+        List<Theatre.Seat> seatCopy = new ArrayList<>(theatre.seats);
+        printList(seatCopy);
+
+        seatCopy.get(1).reserve();
+        if (theatre.reserveSeat("A02")){
+            System.out.println("Please pay for A02");
+        }else {
+            System.out.println("Seat already reserved");
+        }
+
+        Collections.shuffle(seatCopy);              // prints collection list in random order
+        // Collections.reverse(seatCopy);               // prints collection list in reverse order
+        System.out.println("Printing seatCopy");
+        printList(seatCopy);
+        System.out.println("Printing theatre.seat");
+        printList(theatre.seats);
+
+        Theatre.Seat minSeat = Collections.min(seatCopy);
+        Theatre.Seat maxSeat = Collections.max(seatCopy);
+        System.out.println("Min seat number is " + minSeat.getSeatNumber());
+        System.out.println("Max seat number is " + maxSeat.getSeatNumber());
+
+        sortList(seatCopy);
+        System.out.println("Printing sorted copy");
+        printList(seatCopy);
+    }
+
+    public static void printList(List<Theatre.Seat> list){
+        for (Theatre.Seat seat : list){
+            System.out.println(" " + seat.getSeatNumber());
+        }
+        System.out.println();
+        System.out.println("=================================================");
+    }
+
+    public static void sortList(List<? extends Theatre.Seat> list){
+        for (int i = 0; i<list.size(); i++){
+            for (int j = i+1; j<list.size(); j++){          // using bubble swap method but with nested for loop
+                if (list.get(i).compareTo(list.get(j)) >0){
+                    Collections.swap(list, i, j);
+                }
+            }
+        }
     }
 }
