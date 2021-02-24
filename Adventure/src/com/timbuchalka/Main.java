@@ -24,55 +24,21 @@ public class Main {
         locations.get(1).addExit("E", 3);
         locations.get(1).addExit("S", 4);
         locations.get(1).addExit("N", 5);
-//        locations.get(1).addExit("Q", 0);
 
         // adding exits for location 2
         locations.get(2).addExit("N", 5);
-//        locations.get(2).addExit("Q", 0);
 
         // adding exits for location 3
         locations.get(3).addExit("W", 1);
-//        locations.get(3).addExit("Q", 0);
 
         // adding exits for location 4
         locations.get(4).addExit("N", 1);
         locations.get(4).addExit("W", 2);
-//        locations.get(4).addExit("Q", 0);
 
         // adding exits for location 5
         locations.get(5).addExit("S", 1);
         locations.get(5).addExit("W", 2);
-//        locations.get(5).addExit("Q", 0);
 
-        int loc = 1;
-        // loop outputs location value depending on scanner value inputted
-
-        while (true){
-            System.out.println(locations.get(loc).getDescription());
-            if (loc == 0){
-                break;
-            }
-
-            Map<String, Integer> exits = locations.get(loc).getExits();
-            System.out.print("Available exits are ");
-            for (String exit : exits.keySet()){
-                System.out.print(exit + ", ");
-            }
-            System.out.println();
-
-            String direction = scanner.nextLine().toUpperCase();
-
-            if (exits.containsKey(direction)){
-                loc = exits.get(direction);
-            }else {
-                System.out.println("You cannot go in that direction");
-            }
-
-            if (!locations.containsKey(loc)){
-                System.out.println("You cannot go that direction");
-            }
-
-        }
 
         String[] road = "You are standing at the end of a road before a small brick building".split(" ");
         for (String i : road) {
@@ -85,5 +51,62 @@ public class Main {
         for (String i : building) {
             System.out.println(i);
         }
+
+        command();
+
+    }
+
+    public static void command() {
+        Scanner scanner = new Scanner(System.in);
+        int loc = 1;
+
+        // create words in to find in phrases for when taking direction
+        Map<String, String> vocab = new HashMap<String, String>();
+        vocab.put("QUIT", "Q");
+        vocab.put("NORTH", "N");
+        vocab.put("SOUTH", "S");
+        vocab.put("EAST", "E");
+        vocab.put("WEST", "W");
+
+
+        while(true){
+
+            System.out.println(locations.get(loc).getDescription());
+            if(loc == 0){
+                break;
+            }
+
+            Map<String, Integer> exits = locations.get(loc).getExits();
+            System.out.print("Available exits are ");
+            for (String exit : exits.keySet()){
+                System.out.print(exit + ", ");
+            }
+            System.out.println();
+
+
+            String direction = scanner.nextLine().toUpperCase();
+            // checks through each word of a phrase to know which direction to go
+            if(direction.length() > 1){
+                String[] words = direction.split(" ");
+                for(String phrase : words){
+                    if(vocab.containsKey(phrase)){
+                        direction = vocab.get(phrase);
+                        break;
+                    }
+                }
+            }
+
+            if (exits.containsKey(direction)){
+                loc = exits.get(direction);
+            }else {
+                System.out.println("You cannot go in that direction");
+            }
+
+            if (!locations.containsKey(loc)){
+                System.out.println("You cannot go that direction");
+            }
+
+        }
     }
 }
+
