@@ -20,7 +20,7 @@ public class Main {
         locations.put(5, new Location(5, "You are in the forest"));
 */
         Map<String, Integer> tempExit = new HashMap<String, Integer>();
-        locations.put(0, new Location(0, "You are sitting in front of a computer learning Java",tempExit));
+        locations.put(0, new Location(0, "You are sitting in front of a computer learning Java",null));
 
         //using immutable classes to add exits
         // adding exits for location 1
