@@ -96,5 +96,16 @@ public class Main {
             System.out.println("\t" + fullMoon.getName());
         }
 
+        HeavenlyBody pluto = new HeavenlyBody("Pluto", 842);
+        planets.add(pluto);
+
+        for (HeavenlyBody world : planets){
+            System.out.println(world.getName() + ": " + world.getOrbitalPeriod());
+        }
+
+        Object o = new Object();
+        o.equals(o);
+        "pluto".equals("");
+
     }
 }
