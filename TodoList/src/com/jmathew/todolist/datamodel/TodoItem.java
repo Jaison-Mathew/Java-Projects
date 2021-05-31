@@ -1,4 +1,4 @@
-package datamodel;
+package com.jmathew.todolist.datamodel;
 
 import java.time.LocalDate;
 
@@ -39,6 +39,7 @@ public class TodoItem {
 
     @Override
     public String toString() {
+        // displays list items on left listview
         return shortDescription;
     }
 }
