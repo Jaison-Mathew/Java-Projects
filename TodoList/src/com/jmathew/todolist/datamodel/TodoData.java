@@ -32,9 +32,11 @@ public class TodoData {
         return todoItems;
     }
 
+/*
     public void setTodoItems(List<TodoItem> todoItems) {
         this.todoItems = todoItems;
     }
+*/
 
     //Using singletons
     public void loadTodoItems() throws IOException{
