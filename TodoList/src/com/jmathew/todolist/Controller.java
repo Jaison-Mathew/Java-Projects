@@ -16,6 +16,7 @@ import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Controller {
     private List<TodoItem> todoItems;
@@ -74,13 +75,31 @@ public class Controller {
     public void showNewItemDialog(){
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.initOwner(mainBorderPane.getScene().getWindow());
+        dialog.setTitle("Add New Todo Item");           //adds title for dialog window
+        dialog.setHeaderText("Use this dialog to create a new todo item");          //adds header for dialog window
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("todoItemDialog.fxml"));
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("todoItemDialog.fxml"));
-            dialog.getDialogPane().setContent(root);
+            dialog.getDialogPane().setContent(fxmlLoader.load());
         }catch (IOException e){
             System.out.println("Couldn't load the dialog");
             e.printStackTrace();
             return;
+        }
+
+        //displays dialog box when New is clicked
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK){
+            DialogController controller = fxmlLoader.getController();
+            TodoItem newItem = controller.processResult();
+            todoListView.getItems().setAll(TodoData.getInstance().getTodoItems());      //adds item to todolistview instantly
+            todoListView.getSelectionModel().select(newItem);               //automatically selects new item in listview after creation
+            System.out.println("OK pressed");
+        }else{
+            System.out.println("Cancel pressed");
         }
     }
 
