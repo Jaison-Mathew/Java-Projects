@@ -66,7 +66,7 @@ public class Controller {
             }
         });
 
-        todoListView.getItems().setAll(TodoData.getInstance().getTodoItems());      //retrieves data from text file
+        todoListView.setItems(TodoData.getInstance().getTodoItems());      //retrieves data from text file
         todoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         todoListView.getSelectionModel().selectFirst();
     }
@@ -95,7 +95,7 @@ public class Controller {
         if (result.isPresent() && result.get() == ButtonType.OK){
             DialogController controller = fxmlLoader.getController();
             TodoItem newItem = controller.processResult();
-            todoListView.getItems().setAll(TodoData.getInstance().getTodoItems());      //adds item to todolistview instantly
+            //todoListView.getItems().setAll(TodoData.getInstance().getTodoItems());      //adds item to todolistview instantly
             todoListView.getSelectionModel().select(newItem);               //automatically selects new item in listview after creation
             System.out.println("OK pressed");
         }else{
