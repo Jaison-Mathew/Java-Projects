@@ -37,9 +37,11 @@ public class TodoItem {
         this.deadline = deadline;
     }
 
+/*
     @Override
     public String toString() {
         // displays list items on left listview
         return shortDescription;
     }
+*/
 }
