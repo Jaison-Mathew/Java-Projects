@@ -4,6 +4,8 @@ import com.jmathew.todolist.datamodel.TodoData;
 import com.jmathew.todolist.datamodel.TodoItem;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -35,6 +37,9 @@ public class Controller {
     @FXML
     private BorderPane mainBorderPane;
 
+    @FXML
+    private ContextMenu listContextMenu;        //creates context menu to todo item
+
     public void initialize(){
 //        TodoItem item1 = new TodoItem("Mail birthday card", "Buy a 30th birthday card for John",
 //                LocalDate.of(2016, Month.APRIL, 25));
@@ -55,6 +60,18 @@ public class Controller {
 //        todoItems.add(item5);
 //
 //        TodoData.getInstance().setTodoItems(todoItems);
+
+        listContextMenu = new ContextMenu();
+        MenuItem deleteMenuItem = new MenuItem("Delete");           //adds delete option to context menu
+        deleteMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                TodoItem item = todoListView.getSelectionModel().getSelectedItem();
+                deleteItem(item);
+            }
+        });
+
+        listContextMenu.getItems().addAll(deleteMenuItem);
 
         todoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TodoItem>() {
             @Override
@@ -92,6 +109,16 @@ public class Controller {
                         }
                     }
                 };
+
+                cell.emptyProperty().addListener(
+                        (obs, wasEmpty, isNowEmpty) -> {
+                            if (isNowEmpty){
+                                cell.setContextMenu(null);
+                            }else {
+                                cell.setContextMenu(listContextMenu);
+                            }
+                        }
+                );
 
                 return cell;
             }
@@ -142,5 +169,17 @@ public class Controller {
 //        sb.append("Due: ");
 //        sb.append(item.getDeadline().toString());
 //        itemDetailsTextArea.setText(sb.toString());
+    }
+
+    public void deleteItem(TodoItem item){          //deletes selected todo item
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Todo Item");
+        alert.setHeaderText("Delete item: " + item.getShortDescription());
+        alert.setContentText("Are you sure? Press OK to confirm, or cancel to back out.");
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && (result.get() == ButtonType.OK)){
+            TodoData.getInstance().deleteTodoItem(item);
+        }
     }
 }
