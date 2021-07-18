@@ -1,4 +1,4 @@
-
+/*Changes color background and text of button*/
 #button_three{
     -fx-background-color: blue;
     -fx-text-fill: white;
