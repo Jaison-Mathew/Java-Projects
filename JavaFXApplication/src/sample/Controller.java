@@ -9,6 +9,11 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.List;
 
 public class Controller {
 
@@ -20,6 +25,9 @@ public class Controller {
 
     @FXML
     private GridPane gridPane;
+
+    @FXML
+    private WebView webView;
 
     public void initialize(){
 //        label.setScaleX(2.0);
@@ -41,13 +49,41 @@ public class Controller {
 
     @FXML
     public void handleClick(){          //selects option to choose file or directory
-        //FileChooser chooser = new FileChooser();
-        DirectoryChooser chooser = new DirectoryChooser();
-        File file = chooser.showDialog(gridPane.getScene().getWindow());
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Save Application File");
+        chooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Zip", "*.zip"),
+                new FileChooser.ExtensionFilter("PDF", "*.pdf"),
+                new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png", "*.gif"),
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
+
+        //DirectoryChooser chooser = new DirectoryChooser();
+        List<File> file = chooser.showOpenMultipleDialog(gridPane.getScene().getWindow());
         if (file != null){
-            System.out.println(file.getPath());
+            for (int i =0; i< file.size(); i++){
+                System.out.println(file.get(i));
+            }
+            //System.out.println(file.getPath());
         }else {
             System.out.println("Chooser was cancelled");
         }
     }
+
+    @FXML
+    public void handleLinkClick(){              //creates hyperlink to website
+        System.out.println("The link has been clicked");
+//        try{
+//            Desktop.getDesktop().browse(new URI("http://www.javafx.com"));
+//        }catch (IOException e){
+//            e.printStackTrace();
+//        }catch (URISyntaxException e){
+//            e.printStackTrace();
+//        }
+
+        WebEngine engine = webView.getEngine();
+        engine.load("http://www.javafx.com");
+    }
+
+
 }
