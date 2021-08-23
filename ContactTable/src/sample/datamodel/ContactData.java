@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 
+/*
 import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLEventWriter;
@@ -15,6 +16,7 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartDocument;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+*/
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -52,6 +54,7 @@ public class ContactData {
         contacts.remove(item);
     }
 
+    /*
     public void loadContacts() {
         try {
             // First, create a new XMLInputFactory
