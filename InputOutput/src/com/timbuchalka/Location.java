@@ -38,4 +38,8 @@ public class Location {
     public Map<String, Integer> getExits() {
         return new HashMap<String, Integer>(exits);         // ensures that nothing outside of this class can change exits
     }
+
+    protected void addExit(String direction, int location){
+        exits.put(direction, location);
+    }
 }
