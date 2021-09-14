@@ -1,21 +1,20 @@
 package com.timbuchalka;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Locations implements Map<Integer, Location> {
-    private static Map<Integer, Location> locations = new HashMap<Integer, Location>();
+    private static Map<Integer, Location> locations = new LinkedHashMap<Integer, Location>();
 
     public static void main(String[] args) throws IOException {
-        try(FileWriter locFile = new FileWriter("locations.txt");
-            FileWriter dirFile = new FileWriter("directions.txt")){
+        try(BufferedWriter locFile = new BufferedWriter(new FileWriter("locations.txt"));
+            BufferedWriter dirFile = new BufferedWriter(new FileWriter("directions.txt"))){
             for (Location location : locations.values()){
                 locFile.write(location.getLocationID() + ", " + location.getDescription() + "\n");
                 for (String direction : location.getExits().keySet()){
-                    dirFile.write(location.getLocationID() + ", " + direction + ", " + location.getExits().get(direction) + "\n");
+                    if (!direction.equalsIgnoreCase("Q")){
+                        dirFile.write(location.getLocationID() + ", " + direction + ", " + location.getExits().get(direction) + "\n");
+                    }
                 }
             }
         }
@@ -39,7 +38,7 @@ public class Locations implements Map<Integer, Location> {
     static {
 
         // Scanner scanner = null;
-        try(Scanner scanner = new Scanner(new FileReader("locations_big.txt"))) {               //provides same output but without using finally block.
+        try(Scanner scanner = new Scanner(new BufferedReader(new FileReader("locations_big.txt")))) {               //provides same output but without using finally block.
             //scanner = new Scanner(new FileReader("locations_big.txt"));
             scanner.useDelimiter(",");
             while (scanner.hasNextLine()){
