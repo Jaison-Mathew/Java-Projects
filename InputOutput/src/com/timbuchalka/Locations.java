@@ -7,6 +7,7 @@ public class Locations implements Map<Integer, Location> {
     private static Map<Integer, Location> locations = new LinkedHashMap<Integer, Location>();
 
     public static void main(String[] args) throws IOException {
+        /*
         try(BufferedWriter locFile = new BufferedWriter(new FileWriter("locations.txt"));
             BufferedWriter dirFile = new BufferedWriter(new FileWriter("directions.txt"))){
             for (Location location : locations.values()){
@@ -18,7 +19,7 @@ public class Locations implements Map<Integer, Location> {
                 }
             }
         }
-        /*
+
         FileWriter locFile = null;
         try {
             locFile = new FileWriter("locations.txt");
@@ -33,6 +34,22 @@ public class Locations implements Map<Integer, Location> {
             }
         }
 */
+        try(DataOutputStream locFile = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("locations.dat")))){
+            for (Location location : locations.values()){
+                locFile.writeInt(location.getLocationID());
+                locFile.writeUTF(location.getDescription());
+                System.out.println("Writing location " + location.getLocationID() + " : " + location.getDescription());
+                System.out.println("Writing " + (location.getExits().size() -1) + " exits.");
+                locFile.writeInt(location.getExits().size() - 1);
+                for (String direction : location.getExits().keySet()){
+                    if (!direction.equalsIgnoreCase("Q")){          // If the key selected is not quit, then print direction
+                        System.out.println("\t\t" + direction + ", " + location.getExits().get(direction));
+                        locFile.writeUTF(direction);
+                        locFile.writeInt(location.getExits().get(direction));
+                    }
+                }
+            }
+        }
     }
 
     static {
