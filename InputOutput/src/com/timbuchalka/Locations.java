@@ -33,7 +33,7 @@ public class Locations implements Map<Integer, Location> {
                 locFile.close();
             }
         }
-*/
+
         try(DataOutputStream locFile = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("locations.dat")))){
             for (Location location : locations.values()){
                 locFile.writeInt(location.getLocationID());
@@ -50,12 +50,36 @@ public class Locations implements Map<Integer, Location> {
                 }
             }
         }
+*/
+        try(ObjectOutputStream locFile = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("locations.dat")))){
+            for (Location location : locations.values()){
+                locFile.writeObject(location);
+            }
+        }
+
     }
 
 
     static {
-        try(DataInputStream locFile = new DataInputStream(new BufferedInputStream(new FileInputStream("locations.dat")))) {
+        try(ObjectInputStream locFile = new ObjectInputStream(new BufferedInputStream(new FileInputStream("locations.dat")))) {
             boolean eof = false;
+            while (!eof){
+                try {
+                    Location location = (Location) locFile.readObject();
+                    System.out.println("Read location " + location.getLocationID() + " : " + location.getDescription());
+                    System.out.println("Found " + location.getExits().size() + " exits");
+
+                    locations.put(location.getLocationID(), location);
+                }catch (EOFException e){
+                    eof = true;
+                }
+            }
+        }catch (IOException e){
+            System.out.println("IO Exception" + e.getMessage());
+        }catch (ClassNotFoundException e){
+            System.out.println("ClassNotFoundException " + e.getMessage());
+        }
+/*
             while (!eof){
                 try {
                     Map<String, Integer> exits = new LinkedHashMap<>();
@@ -75,9 +99,8 @@ public class Locations implements Map<Integer, Location> {
                     eof = true;
                 }
             }
-        }catch (IOException e){
-            System.out.println("IO Exception");
-        }
+*/
+
 /*
         // Scanner scanner = null;
         try(Scanner scanner = new Scanner(new BufferedReader(new FileReader("locations_big.txt")))) {               //provides same output but without using finally block.
