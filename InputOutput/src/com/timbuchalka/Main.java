@@ -17,9 +17,7 @@ public class Main {
         locations.put(3, new Location(3, "You are inside a building, a well house for a small spring"));
         locations.put(4, new Location(4, "You are in a valley beside a stream"));
         locations.put(5, new Location(5, "You are in the forest"));
-*/
 
-/*
         // adding exits for location 1
         locations.get(1).addExit("W", 2);
         locations.get(1).addExit("E", 3);
