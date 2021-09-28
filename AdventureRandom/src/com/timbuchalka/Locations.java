@@ -6,6 +6,7 @@ import java.util.*;
 public class Locations implements Map<Integer, Location> {
     private static Map<Integer, Location> locations = new LinkedHashMap<Integer, Location>();
     private static Map<Integer, IndexRecord> index = new LinkedHashMap<>();
+    private static RandomAccessFile ra;
 
     public static void main(String[] args) throws IOException {
         /*
@@ -75,10 +76,17 @@ public class Locations implements Map<Integer, Location> {
                     }
                 }
                 rao.writeUTF(builder.toString());
-                IndexRecord record = new IndexRecord(startPointer, (int) (rao.getFilePointer() - startPointer));
+                IndexRecord record = new IndexRecord(startPointer, (int) (rao.getFilePointer() - startPointer));        // creates index record of location
                 index.put(location.getLocationID(), record);
 
                 startPointer = (int) rao.getFilePointer();
+            }
+
+            rao.seek(indexStart);       // seeking offset of indexStart
+            for (Integer locationID : index.keySet()){      // looping through index records
+                rao.writeInt(locationID);
+                rao.writeInt(index.get(locationID).getStartByte());
+                rao.writeInt(index.get(locationID).getLength());
             }
         }
 
@@ -90,6 +98,25 @@ public class Locations implements Map<Integer, Location> {
     // 4.  The final section of the file will contain the location records (the data). It will start at byte 1700.
 
     static {
+        try{
+            ra = new RandomAccessFile("locations_rand.dat", "rwd");         //open locations.rand.dat file
+            int numLocations = ra.readInt();            // reads number of locations from file into a variable
+            long locationStartPoint = ra.readInt();     // reads offset of the location section
+
+            while (ra.getFilePointer() < locationStartPoint){       // loops until the file pointer reaches the locations offset
+                // reads the index and creates the records
+                int locationId = ra.readInt();
+                int locationStart = ra.readInt();
+                int locationLength = ra.readInt();
+
+                IndexRecord record = new IndexRecord(locationStart, locationLength);       // creating new index record
+                index.put(locationId, record);      // saving new index record
+            }
+
+        }catch (IOException e){
+            System.out.println("IOException in static initializer: " + e.getMessage());
+        }
+/*
         try(ObjectInputStream locFile = new ObjectInputStream(new BufferedInputStream(new FileInputStream("locations.dat")))) {
             boolean eof = false;
             while (!eof){
@@ -110,7 +137,7 @@ public class Locations implements Map<Integer, Location> {
         }catch (ClassNotFoundException e){
             System.out.println("ClassNotFoundException " + e.getMessage());
         }
-/*
+
             while (!eof){
                 try {
                     Map<String, Integer> exits = new LinkedHashMap<>();
