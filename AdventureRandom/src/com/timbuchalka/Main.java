@@ -1,5 +1,6 @@
 package com.timbuchalka;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -7,7 +8,7 @@ import java.util.Scanner;
 public class Main {
     private static Locations locations = new Locations();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
 /*
         // creating new locations for map
@@ -53,7 +54,6 @@ public class Main {
             System.out.println(i);
         }
 
-        int loc = 1;
 
         // create words in to find in phrases for when taking direction
         Map<String, String> vocab = new HashMap<String, String>();
@@ -63,15 +63,16 @@ public class Main {
         vocab.put("EAST", "E");
         vocab.put("WEST", "W");
 
-
+        //creating first location
+        Location currentLocation = locations.getLocation(1);
         while(true){
 
-            System.out.println(locations.get(loc).getDescription());
-            if(loc == 0){
+            System.out.println(currentLocation.getDescription());
+            if(currentLocation.getLocationID() == 0){
                 break;
             }
 
-            Map<String, Integer> exits = locations.get(loc).getExits();
+            Map<String, Integer> exits = currentLocation.getExits();
             System.out.print("Available exits are ");
             for (String exit : exits.keySet()){
                 System.out.print(exit + ", ");
@@ -92,18 +93,12 @@ public class Main {
             }
 
             if (exits.containsKey(direction)){
-                loc = exits.get(direction);
+                currentLocation = locations.getLocation(currentLocation.getExits().get(direction));
             }else {
                 System.out.println("You cannot go in that direction");
             }
-
-            if (!locations.containsKey(loc)){
-                System.out.println("You cannot go that direction");
-            }
-
         }
-
-
+        locations.close();
     }
 
 /*

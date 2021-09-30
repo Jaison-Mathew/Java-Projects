@@ -116,28 +116,8 @@ public class Locations implements Map<Integer, Location> {
         }catch (IOException e){
             System.out.println("IOException in static initializer: " + e.getMessage());
         }
+
 /*
-        try(ObjectInputStream locFile = new ObjectInputStream(new BufferedInputStream(new FileInputStream("locations.dat")))) {
-            boolean eof = false;
-            while (!eof){
-                try {
-                    Location location = (Location) locFile.readObject();
-                    System.out.println("Read location " + location.getLocationID() + " : " + location.getDescription());
-                    System.out.println("Found " + location.getExits().size() + " exits");
-
-                    locations.put(location.getLocationID(), location);
-                }catch (EOFException e){
-                    eof = true;
-                }
-            }
-        }catch (InvalidClassException e){
-            System.out.println("InvalidClassException " + e.getMessage());
-        }catch (IOException e){
-            System.out.println("IO Exception " + e.getMessage());
-        }catch (ClassNotFoundException e){
-            System.out.println("ClassNotFoundException " + e.getMessage());
-        }
-
             while (!eof){
                 try {
                     Map<String, Integer> exits = new LinkedHashMap<>();
@@ -253,6 +233,32 @@ public class Locations implements Map<Integer, Location> {
 */
     }
 
+    public Location getLocation(int locationId) throws IOException{
+        IndexRecord record = index.get(locationId);
+        ra.seek(record.getStartByte());     // moving the file pointer to the locations offset
+        int id = ra.readInt();      // retrieving location id
+        String description = ra.readUTF();
+        String exits = ra.readUTF();
+
+        // extracts the various exits
+        String[] exitPart = new String(exits).split(",");
+
+        //create new location
+        Location location = new Location(locationId, description, null);
+
+        //sends exits to the location
+        if (locationId != 0){
+            for (int i =0; i< exitPart.length; i++){
+                System.out.println("exitPart = " + exitPart[i]);
+                System.out.println("exitPart[+1] = " + exitPart[i+1]);
+                String direction = exitPart[i];
+                int destination = Integer.parseInt(exitPart[++i]);
+                location.addExit(direction, destination);
+            }
+        }
+        return location;
+    }
+
     @Override
     public int size() {
         return locations.size();
@@ -311,5 +317,10 @@ public class Locations implements Map<Integer, Location> {
     @Override
     public Set<Entry<Integer, Location>> entrySet() {
         return locations.entrySet();
+    }
+
+    // Closes random access file when the player quits the game
+    public void close() throws IOException{
+        ra.close();
     }
 }
