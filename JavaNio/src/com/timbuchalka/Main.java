@@ -18,15 +18,57 @@ public class Main {
         try(FileOutputStream binFile = new FileOutputStream("data.dat");
             FileChannel binChannel = binFile.getChannel()){         //output stream will be closed when execution is finished because using try with resources
             ByteBuffer buffer = ByteBuffer.allocate(100);
+
+/*
+            byte[] outputBytes = "Hello World!".getBytes();         //creates byte array
+            byte[] outputBytes2 = "Nice to meet you".getBytes();
+            buffer.put(outputBytes).putInt(245).putInt(-98765).put(outputBytes2).putInt(1000);                  //using chained put method
+            buffer.flip();
+*/
+
+            //read(ByteBuffer) - reads bytes beginning at the channel's current position, and after the read,
+            //                   updates the position accordingly. Note that now we're talking about the channel's
+            //                   position, not the byte buffer's position. Of course, the bytes will be placed into the
+            //                   buffer starting at its current position.
+            //write(Buffer) - the same as read, except it writes. There's one exception. If a datasource is opened in
+            //                APPEND mode, then the first write will take place starting at the end of the datasource,
+            //                rather than at position 0. After the write, the position will be updated accordingly.
+            //position() - returns the channel's position.
+            //position(long) - sets the channel's position to the passed value.
+            //truncate(long) - truncates the size of the attached datasource to the passed value.
+            //size() - returns the size of the attached datasource.
+
+            //using unchained put method
             byte[] outputBytes = "Hello World!".getBytes();         //creates byte array
             buffer.put(outputBytes);
+            long int1Pos = outputBytes.length;                      //start position will be the number of bytes in the string.
             buffer.putInt(245);
+            long int2Pos = int1Pos + Integer.BYTES;
             buffer.putInt(-98765);
             byte[] outputBytes2 = "Nice to meet you".getBytes();
             buffer.put(outputBytes2);
+            long int3Pos = int2Pos + Integer.BYTES + outputBytes2.length;
             buffer.putInt(1000);
             buffer.flip();
+
             binChannel.write(buffer);
+
+            RandomAccessFile ra = new RandomAccessFile("data.dat", "rwd");
+            FileChannel channel = ra.getChannel();
+
+            ByteBuffer readBuffer = ByteBuffer.allocate(100);
+            channel.read(readBuffer);
+            readBuffer.flip();                                  //switching from writing to the buffer, to reading from the buffer.
+            byte[] inputString = new byte[outputBytes.length];
+            readBuffer.get(inputString);                        //using get method to get the first string
+            System.out.println("inputString = " + new String(inputString));
+            System.out.println("int1 = " + readBuffer.getInt());
+            System.out.println("int2 = " + readBuffer.getInt());
+            byte[] inputString2 = new byte[outputBytes2.length];
+            readBuffer.get(inputString2);
+            System.out.println("inputString2 = " + new String(inputString2));
+            System.out.println("int3 = " + readBuffer.getInt());
+
 
 /*
             ByteBuffer buffer = ByteBuffer.allocate(outputBytes.length);           //allocates byte array into the buffer
