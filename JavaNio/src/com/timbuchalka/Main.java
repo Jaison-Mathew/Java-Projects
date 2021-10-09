@@ -17,8 +17,22 @@ public class Main {
     public static void main(String[] args) {
         try(FileOutputStream binFile = new FileOutputStream("data.dat");
             FileChannel binChannel = binFile.getChannel()){         //output stream will be closed when execution is finished because using try with resources
+            ByteBuffer buffer = ByteBuffer.allocate(100);
             byte[] outputBytes = "Hello World!".getBytes();         //creates byte array
-            ByteBuffer buffer = ByteBuffer.wrap(outputBytes);           //wraps byte array into the buffer
+            buffer.put(outputBytes);
+            buffer.putInt(245);
+            buffer.putInt(-98765);
+            byte[] outputBytes2 = "Nice to meet you".getBytes();
+            buffer.put(outputBytes2);
+            buffer.putInt(1000);
+            buffer.flip();
+            binChannel.write(buffer);
+
+/*
+            ByteBuffer buffer = ByteBuffer.allocate(outputBytes.length);           //allocates byte array into the buffer
+            buffer.put(outputBytes);
+
+            buffer.flip();
             int numBytes = binChannel.write(buffer);
             System.out.println("numBytes written was: " + numBytes);
 
@@ -42,6 +56,7 @@ public class Main {
             long numBytesRead = channel.read(buffer);
             if (buffer.hasArray()){
                 System.out.println("byte buffer = " + new String(buffer.array()));
+                //System.out.println("byte buffer = " + new String(outputBytes));
             }
 
             //Absolute read
@@ -50,11 +65,13 @@ public class Main {
             System.out.println(intBuffer.getInt(0));            //starts read at index position
             intBuffer.flip();
             numBytesRead = channel.read(intBuffer);
+            intBuffer.flip();
             System.out.println(intBuffer.getInt(0));
+            System.out.println(intBuffer.getInt());
 
 
 
-/*          Relative read
+          //Relative read
 
             intBuffer.flip();
             numBytesRead = channel.read(intBuffer);
@@ -66,7 +83,8 @@ public class Main {
             System.out.println(intBuffer.getInt());
             channel.close();
             ra.close();
-*/
+*//*
+
 
             //System.out.println("outputBytes = " + new String(outputBytes));
 
