@@ -14,13 +14,21 @@ public class Main {
         printFile(path);        //prints file
 
         //printing the contents of the file in the files subdirectory
-        Path filePath = FileSystems.getDefault().getPath("files", "SubdirectoryFile.txt");
+        //Path filePath = FileSystems.getDefault().getPath("files", "SubdirectoryFile.txt");
+        Path filePath = Paths.get(".","files", "SubdirectoryFile.txt");
         printFile(filePath);
 
         //printing contents of a file outside directory
         filePath = Paths.get("C:\\Users\\jtron\\Documents\\Computer Programming Notes\\Java\\Projects\\OutThere.txt");
         printFile(filePath);
 
+        //printing absolute path
+        filePath = Paths.get(".");
+        System.out.println(filePath.toAbsolutePath());
+
+        Path path2 = FileSystems.getDefault().getPath(".", "files", "..", "files", "SubdirectoryFile.txt");
+        System.out.println(path2.normalize().toAbsolutePath());
+        printFile(path2.normalize());
     }
 
     private static void printFile(Path path){
