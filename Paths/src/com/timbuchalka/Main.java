@@ -2,22 +2,42 @@ package com.timbuchalka;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        //copying file in same directory
         try {
+/*
+            //copying file in same directory
             Path sourceFile = FileSystems.getDefault().getPath("Examples", "file1.txt");
             Path copyFile = FileSystems.getDefault().getPath("Examples", "file1copy.txt");
-            Files.copy(sourceFile, copyFile);
+            Files.copy(sourceFile, copyFile, StandardCopyOption.REPLACE_EXISTING);
+
+            //copying directory
+            sourceFile = FileSystems.getDefault().getPath("Examples", "Dir1");
+            copyFile = FileSystems.getDefault().getPath("Examples", "Dir4");
+            Files.copy(sourceFile, copyFile, StandardCopyOption.REPLACE_EXISTING);
+
+            //move file to different directory
+            Path fileToMove = FileSystems.getDefault().getPath("Examples", "file1copy.txt");
+            Path destination = FileSystems.getDefault().getPath("Examples", "Dir1", "file1copy.txt");
+            Files.move(fileToMove, destination);
+
+            //Renaming file
+            Path fileToRename = FileSystems.getDefault().getPath("Examples", "file1.txt");
+            Path fileName = FileSystems.getDefault().getPath("Examples", "file2.txt");
+            Files.move(fileToRename, fileName);
+*/
+            //Deleting file
+            Path fileToDelete = FileSystems.getDefault().getPath("Examples", "Dir1", "file1copy.txt");
+            Files.deleteIfExists(fileToDelete);
+
         }catch (IOException e){
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+
+
 
 
 /*
