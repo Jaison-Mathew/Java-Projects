@@ -10,6 +10,17 @@ import java.nio.file.Paths;
 public class Main {
 
     public static void main(String[] args) {
+        //copying file in same directory
+        try {
+            Path sourceFile = FileSystems.getDefault().getPath("Examples", "file1.txt");
+            Path copyFile = FileSystems.getDefault().getPath("Examples", "file1copy.txt");
+            Files.copy(sourceFile, copyFile);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+
+/*
         Path path = FileSystems.getDefault().getPath("WorkingDirectoryFile.txt");           //creates path to file
         printFile(path);        //prints file
 
@@ -29,6 +40,21 @@ public class Main {
         Path path2 = FileSystems.getDefault().getPath(".", "files", "..", "files", "SubdirectoryFile.txt");
         System.out.println(path2.normalize().toAbsolutePath());
         printFile(path2.normalize());
+
+        //cresting file paths that do not exist
+        Path path3 = FileSystems.getDefault().getPath("thisfiledoesnotexist.txt");
+        System.out.println(path3.toAbsolutePath());
+
+        Path path4 = Paths.get("\\Volumes\\Test\\ING", "abcdef", "whatever.txt");
+        System.out.println(path4.toAbsolutePath());
+
+        //checks if file directory exists
+        filePath = FileSystems.getDefault().getPath("files");
+        System.out.println("Exists = " + Files.exists(filePath));
+
+        System.out.println("path3 exists = " + Files.exists(path3));
+        System.out.println("path4 exists = " + Files.exists(path4));
+
     }
 
     private static void printFile(Path path){
@@ -41,5 +67,6 @@ public class Main {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
+*/
     }
 }
