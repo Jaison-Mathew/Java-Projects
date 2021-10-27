@@ -54,5 +54,14 @@ public class Main {
         for (Path path : rootPaths){
             System.out.println(path);               //displays root directory
         }
+
+        //displaying walking filetree
+        System.out.println("---Walking tree for Dir2---");
+        Path dir2Path = FileSystems.getDefault().getPath("FileTree" + File.separator + "Dir2");             //created path to dir2 folder
+        try {
+            Files.walkFileTree(dir2Path, new PrintNames());           //walking on path
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
     }
 }
