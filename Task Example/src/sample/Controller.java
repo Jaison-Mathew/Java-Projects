@@ -5,7 +5,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 
 public class Controller {
     private Task<ObservableList<String>> task;
@@ -13,26 +15,40 @@ public class Controller {
     @FXML
     private ListView listView;
 
+    @FXML
+    private ProgressBar progressBar;
+
+    @FXML
+    private Label progressLabel;
+
     public void initialize(){
         task = new Task<ObservableList<String>>() {
             @Override
             protected ObservableList<String> call() throws Exception {
-                Thread.sleep(1000);
 
-                ObservableList<String> employees =  FXCollections.observableArrayList(
-                        "Tim Buchalka,",
-                            "Bill Rogers",
-                            "Jack Jill",
-                            "Joan Andrews",
-                            "Mary Johnson",
-                            "Bob McDonald");
+                String[] names = {"Tim Buchalka,",
+                        "Bill Rogers",
+                        "Jack Jill",
+                        "Joan Andrews",
+                        "Mary Johnson",
+                        "Bob McDonald" };
+
+                ObservableList<String> employees =  FXCollections.observableArrayList();
+
+                for (int i=0; i<6; i++){
+                    employees.add(names[i]);
+                    updateMessage("Added " + names[i] + " to the list.");
+                    updateProgress(i + 1, 6);           //i+1 is the current progress, and 6 is the maximum progress. Current progress passes the number of names added.
+                    Thread.sleep(200);
+                }
 
                 return employees;
             }
         };
 
+        progressBar.progressProperty().bind(task.progressProperty());
+        progressLabel.textProperty().bind(task.messageProperty());
         listView.itemsProperty().bind(task.valueProperty());
-
     }
 
     @FXML
