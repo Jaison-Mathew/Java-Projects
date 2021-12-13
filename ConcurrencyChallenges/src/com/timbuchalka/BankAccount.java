@@ -17,10 +17,13 @@ public class BankAccount {
     }
 
     public void deposit(double amount){
+
+        boolean status = false;
         try {
             if (lock.tryLock(1000, TimeUnit.MILLISECONDS)){
                 try {                   //the critical section of code is in the try/finally block to ensure that the lock will be released.
                     balance += amount;
+                    status = true;
                 }finally {
                     lock.unlock();
                 }
@@ -30,13 +33,18 @@ public class BankAccount {
         }catch (InterruptedException e){
             //do something here
         }
+
+        System.out.println("Transaction status = " + status);
     }
 
     public void withdraw(double amount){
+
+        boolean status = false;         //local variables such as status are already threadsafe
         try {
             if (lock.tryLock(1000, TimeUnit.MILLISECONDS)){
                 try {
-                    balance += amount;
+                    balance -= amount;
+                    status = true;
                 }finally {
                     lock.unlock();
                 }
@@ -46,6 +54,8 @@ public class BankAccount {
         }catch (InterruptedException e){
             //do something here
         }
+
+        System.out.println("Transaction status = " + status);
     }
 
     public String getAccountNumber(){
