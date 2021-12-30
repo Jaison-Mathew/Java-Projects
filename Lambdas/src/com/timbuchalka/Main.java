@@ -8,12 +8,13 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
+/*
         new Thread(()-> {
             System.out.println("Printing from the Runnable");
             System.out.println("Line 2");
             System.out.format("This is line %d\n", 3);
         }).start();
-
+*/
 
         Employee john = new Employee("John Doe", 30);
         Employee tim = new Employee("Tim Buchalka", 21);
@@ -26,7 +27,25 @@ public class Main {
         employees.add(jack);
         employees.add(snow);
 
-/*
+        employees.forEach(employee -> {
+            System.out.println(employee.getName());
+            System.out.println(employee.getAge());
+        });
+
+        /*
+        for (Employee employee : employees){
+            System.out.println(employee.getName());
+            System.out.println(employee.getAge());
+        }
+
+        System.out.println("***********************************");
+        for (int i=0; i<employees.size(); i++){
+            Employee employee = employees.get(i);           //males lambda expression final
+            System.out.println(employee.getName());
+            new Thread(() -> System.out.println(employee.getAge())).start();
+        }
+
+
         Collections.sort(employees, new Comparator<Employee>() {
             @Override
             public int compare(Employee employee1, Employee employee2) {
@@ -123,9 +142,11 @@ class AnotherClass{
 
         UpperConcat uc = (s1, s2) -> {
             System.out.println("The lambda expression's class is " + getClass().getSimpleName());
+            System.out.println("i in the lambda expression = " + i);
             String result = s1.toUpperCase() + s2.toUpperCase();
             return result;
         };
+
 
 /*
         //{              code within a nested block can reference variables defined within the enclosing block
@@ -140,8 +161,24 @@ class AnotherClass{
         //i++;
         System.out.println("i = " + i);
 */
+
         System.out.println("The AnotherClass class's name is " + getClass().getSimpleName());
         return Main.doStringStuff(uc, "String1", "String2");
        // }
+    }
+
+    public void printValue(){
+        int number = 25;
+
+        Runnable r = () -> {            //using lambda for runnable
+            try {
+                Thread.sleep(5000);
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            System.out.println("The value is " + number);
+        };
+
+        new Thread(r).start();
     }
 }
