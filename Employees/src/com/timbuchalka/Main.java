@@ -3,10 +3,7 @@ package com.timbuchalka;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
-import java.util.function.IntPredicate;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 public class Main {
 
@@ -76,6 +73,27 @@ public class Main {
                 System.out.println(getAName(getLastName, employee));
             }
         }
+
+        Function<Employee, String> upperCase = employee -> employee.getName().toUpperCase();
+        Function<String, String> concatenate = name -> name.substring(0, name.indexOf(' '));
+
+        //chaining functions to print results
+        Function chainedFunction = upperCase.andThen(concatenate);
+        System.out.println(chainedFunction.apply(employees.get(0)));
+
+        BiFunction<String, Employee, String> concatAge = (String name, Employee employee) -> {
+            return name.concat(" " + employee.getAge());
+        };
+
+        String upperName = upperCase.apply(employees.get(0));
+        System.out.println(concatAge.apply(upperName, employees.get(0)));
+
+        IntUnaryOperator incBy5 = i -> i+5;
+        System.out.println(incBy5.applyAsInt(10));
+
+        Consumer<String> c1 = s -> s.toUpperCase();
+        Consumer<String> c2 = s -> System.out.println(s);
+        c1.andThen(c2).accept("Hello World!");
 
 /*
         System.out.println("Employees over 30:");
