@@ -1,5 +1,7 @@
 package com.timbuchalka;
 
+import javax.crypto.spec.PSource;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -24,6 +26,26 @@ public class Main {
         System.out.println(alphanumeric.replaceAll("[aei]", "X"));              // replaces all a, e, and i characters to X
         System.out.println(alphanumeric.replaceAll("[aei]", " I replaced a letter here "));
         System.out.println(alphanumeric.replaceAll("[aei][Fj]", "X"));
+
+        System.out.println("harry".replaceAll("[Hh]arry", "Harry"));
+
+        String newAlphanumeric = "abcDeeeF12Ghiiiijkl99z";
+        System.out.println(newAlphanumeric.replaceAll("[^ej]", "X"));           //replaces all character that are not e or j to X
+        System.out.println(newAlphanumeric.replaceAll("[abcdef345678]", "X"));
+        System.out.println(newAlphanumeric.replaceAll("[a-fA-F3-8]", "X"));
+        System.out.println(newAlphanumeric.replaceAll("(?i)[a-f3-8]", "X"));
+        System.out.println(newAlphanumeric.replaceAll("[0-9]", "X"));
+        System.out.println(newAlphanumeric.replaceAll("\\d", "X"));
+        System.out.println(newAlphanumeric.replaceAll("\\D", "X"));         //replaces all non-digits with X
+
+        String hasWhitespace = "I have blanks and\ta tab, and also a newline\n";
+        System.out.println(hasWhitespace);
+        System.out.println(hasWhitespace.replaceAll("\\s", ""));            //removes all spaces, tabs and new lines
+        System.out.println(hasWhitespace.replaceAll("\t", "X"));            //replaces all tabs with X
+        System.out.println(hasWhitespace.replaceAll("\\S", ""));            //Only tab, spaces, and newline characters remain
+        System.out.println(newAlphanumeric.replaceAll("\\w", "X"));         //whitespace character were replaced
+        System.out.println(hasWhitespace.replaceAll("\\w", "X"));           //everything but whitespace characters were replaced to X
+        System.out.println(hasWhitespace.replaceAll("\\b", "X"));           //X is placed at the beginning and end of each word
 
     }
 }
