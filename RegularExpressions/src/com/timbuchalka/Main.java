@@ -1,6 +1,8 @@
 package com.timbuchalka;
 
 import javax.crypto.spec.PSource;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
 
@@ -46,6 +48,31 @@ public class Main {
         System.out.println(newAlphanumeric.replaceAll("\\w", "X"));         //whitespace character were replaced
         System.out.println(hasWhitespace.replaceAll("\\w", "X"));           //everything but whitespace characters were replaced to X
         System.out.println(hasWhitespace.replaceAll("\\b", "X"));           //X is placed at the beginning and end of each word
+
+        //Practicing different quantifiers
+        String thirdAlphanumeric = "abcDeeeF12Ghiiiijkl99z";
+        System.out.println(thirdAlphanumeric.replaceAll("^abcDe{3}", "YYY"));
+        System.out.println(thirdAlphanumeric.replaceAll("^abcDe+", "YYY"));
+
+        // practicing astrix quantifier
+        System.out.println(thirdAlphanumeric.replaceAll("^abcDe*", "YYY"));
+
+        System.out.println(thirdAlphanumeric.replaceAll("^abcDe{2,5}", "YYY"));
+        System.out.println(thirdAlphanumeric.replaceAll("h+i*j", "Y"));
+
+        StringBuilder htmlText = new StringBuilder("<h1>My heading</h1>");
+        htmlText.append("<h2>Sub-heading</h2>");
+        htmlText.append("<p>This paragraph about something.</p>");
+        htmlText.append("<p>This is another paragraph about something else.</p>");
+        htmlText.append("<h2>Summary</h2>");
+        htmlText.append("<p>Here is the summary.</p>");
+
+        //practicing Pattern and Matcher classes
+        String h2Pattern = ".*<h2>.*";
+        Pattern pattern = Pattern.compile(h2Pattern);
+        Matcher matcher = pattern.matcher(htmlText);
+        System.out.println(matcher.matches());
+
 
     }
 }
