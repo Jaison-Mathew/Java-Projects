@@ -80,7 +80,21 @@ public class Main {
             System.out.println("Occurrence: " + matcher11a.group(1));
         }
 
+        //creating regular expression that will match a 5 digit zip codes.
+        String challenge12 = "11111";
+        System.out.println(challenge12.matches("^\\d{5}$"));
 
+        //creating regular expression that will match a 5 digit zip codes followed by a dash and 4 numbers.
+        String challenge13 = "11111-1111";
+        System.out.println(challenge13.matches("^\\d{5}-\\d{4}$"));
+
+        //creating regular expression that will match a 5 digit zip codes, and 5 digit zip codes that also contain a dash and 4 numbers.
+        System.out.println(challenge12.matches("^\\d{5}(-\\d{4})?$"));
+        System.out.println(challenge13.matches("^\\d{5}(-\\d{4})?$"));
+
+        // ^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$
+        // This expression expects a letter followed by a digit followed by a letter, then a blank and a dash,
+        // then followed by a number followed by a letter, followed by a number.
 
     }
 }
