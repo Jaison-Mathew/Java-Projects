@@ -94,7 +94,7 @@ public class Datasource {
     private PreparedStatement queryAlbum;
 
     //returns true if connection is truly established, and returns false if otherwise.
-    public boolean open(){
+    public boolean open() {
         try {
             conn = DriverManager.getConnection(CONNECTION_STRING);
             querySongInfoView = conn.prepareStatement(QUERY_VIEW_SONG_INFO_PREP);
@@ -105,69 +105,69 @@ public class Datasource {
             queryAlbum = conn.prepareStatement(QUERY_ALBUM);
 
             return true;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Couldn't connect to database: " + e.getMessage());
             return false;
         }
     }
 
     //closes connection
-    public void close(){
+    public void close() {
         try {
-            if (querySongInfoView != null){
+            if (querySongInfoView != null) {
                 querySongInfoView.close();
             }
 
-            if (insertIntoArtists != null){
+            if (insertIntoArtists != null) {
                 insertIntoArtists.close();
             }
 
-            if (insertIntoAlbums != null){
+            if (insertIntoAlbums != null) {
                 insertIntoAlbums.close();
             }
 
-            if (insertIntoSongs != null){
+            if (insertIntoSongs != null) {
                 insertIntoSongs.close();
             }
 
-            if (queryArtist != null){
+            if (queryArtist != null) {
                 queryArtist.close();
             }
 
-            if (queryAlbum != null){
+            if (queryAlbum != null) {
                 queryAlbum.close();
             }
 
-            if (conn != null){
+            if (conn != null) {
                 conn.close();
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Couldn't close connection: " + e.getMessage());
         }
     }
 
-    public List<Artist> queryArtists(int sortOrder){
+    public List<Artist> queryArtists(int sortOrder) {
 
         StringBuilder sb = new StringBuilder("SELECT * FROM ");
         sb.append(TABLE_ARTISTS);
-        if (sortOrder != ORDER_BY_NONE){
+        if (sortOrder != ORDER_BY_NONE) {
             sb.append(" ORDER BY ");
             sb.append(COLUMN_ARTIST_NAME);
             sb.append(" COLLATE NOCASE ");
-            if (sortOrder == ORDER_BY_DESC){
+            if (sortOrder == ORDER_BY_DESC) {
                 sb.append("DESC");
-            }else {
+            } else {
                 sb.append("ASC");
             }
         }
 
-        try(Statement statement = conn.createStatement();
-        ResultSet results = statement.executeQuery(sb.toString())){
+        try (Statement statement = conn.createStatement();
+             ResultSet results = statement.executeQuery(sb.toString())) {
 
             List<Artist> artists = new ArrayList<>();
 
             //returns all artist records with all column values.
-            while (results.next()){
+            while (results.next()) {
                 Artist artist = new Artist();
                 artist.setId(results.getInt(INDEX_ARTIST_ID));
                 artist.setName(results.getString(INDEX_ARTIST_NAME));
@@ -176,7 +176,7 @@ public class Datasource {
 
             return artists;
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Query failed: " + e.getMessage());
             return null;
         }/*finally {
@@ -197,7 +197,7 @@ public class Datasource {
         }*/
     }
 
-    public List<String> queryAlbumsForArtist(String artistName, int sortOrder){
+    public List<String> queryAlbumsForArtist(String artistName, int sortOrder) {
         StringBuilder sb = new StringBuilder(QUERY_ALBUMS_BY_ARTIST_START);
         sb.append(artistName);
         sb.append("\"");
@@ -226,7 +226,7 @@ public class Datasource {
         sb.append("\"");
 */
 
-        if (sortOrder != ORDER_BY_NONE){
+        if (sortOrder != ORDER_BY_NONE) {
             sb.append(QUERY_ALBUMS_BY_ARTIST_SORT);
 /*
             sb.append(" ORDER BY ");
@@ -235,54 +235,54 @@ public class Datasource {
             sb.append(COLUMN_ALBUM_NAME);
             sb.append(" COLLATE NOCASE ");
 */
-            if (sortOrder == ORDER_BY_DESC){
+            if (sortOrder == ORDER_BY_DESC) {
                 sb.append("DESC");
-            }else {
+            } else {
                 sb.append("ASC");
             }
         }
 
         System.out.println("SQL statement = " + sb.toString());
 
-        try(Statement statement = conn.createStatement();
-        ResultSet results = statement.executeQuery(sb.toString())){
+        try (Statement statement = conn.createStatement();
+             ResultSet results = statement.executeQuery(sb.toString())) {
 
             List<String> albums = new ArrayList<>();
-            while (results.next()){
+            while (results.next()) {
                 albums.add(results.getString(1));
             }
 
             return albums;
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Query failed: " + e.getMessage());
             return null;
         }
     }
 
-    public List<SongArtist> queryArtistsForSong(String songName, int sortOrder){
+    public List<SongArtist> queryArtistsForSong(String songName, int sortOrder) {
 
         StringBuilder sb = new StringBuilder(QUERY_ARTIST_FOR_SONG_START);
         sb.append(songName);
         sb.append("\"");
 
-        if (sortOrder != ORDER_BY_NONE){
+        if (sortOrder != ORDER_BY_NONE) {
             sb.append(QUERY_ARTIST_FOR_SONG_SORT);
-            if (sortOrder == ORDER_BY_DESC){
+            if (sortOrder == ORDER_BY_DESC) {
                 sb.append("DESC");
-            }else {
+            } else {
                 sb.append("ASC");
             }
         }
 
         System.out.println("SQL Statement: " + sb.toString());
 
-        try(Statement statement = conn.createStatement();
-            ResultSet results = statement.executeQuery(sb.toString())) {
+        try (Statement statement = conn.createStatement();
+             ResultSet results = statement.executeQuery(sb.toString())) {
 
             List<SongArtist> songArtists = new ArrayList<>();
 
-            while (results.next()){
+            while (results.next()) {
                 SongArtist songArtist = new SongArtist();
                 songArtist.setArtistName(results.getString(1));
                 songArtist.setAlbumName(results.getString(2));
@@ -291,35 +291,35 @@ public class Datasource {
             }
 
             return songArtists;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Query failed: " + e.getMessage());
             return null;
         }
     }
 
-    public void querySongsMetadata(){
+    public void querySongsMetadata() {
         String sql = "SELECT * FROM " + TABLE_SONGS;
 
-        try(Statement statement = conn.createStatement();
-            ResultSet results = statement.executeQuery(sql)){
+        try (Statement statement = conn.createStatement();
+             ResultSet results = statement.executeQuery(sql)) {
 
             ResultSetMetaData meta = results.getMetaData();
             int numColumns = meta.getColumnCount();
-            for (int i=1; i<= numColumns; i++){
+            for (int i = 1; i <= numColumns; i++) {
                 System.out.format("Column %d in the songs table is names %s\n",
                         i, meta.getColumnName(i));
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Query failed: " + e.getMessage());
         }
     }
 
-    public int getCount(String table){
+    public int getCount(String table) {
         //String sql = "SELECT COUNT(*) AS count, MIN(_id) AS min_id FROM " + table;
         String sql = "SELECT COUNT(*) AS count FROM " + table;
 
-        try(Statement statement = conn.createStatement();
-            ResultSet results = statement.executeQuery(sql)) {
+        try (Statement statement = conn.createStatement();
+             ResultSet results = statement.executeQuery(sql)) {
 
             int count = results.getInt("count");
             //int min = results.getInt("min_id");
@@ -328,27 +328,27 @@ public class Datasource {
             System.out.format("Count = %d\n", count);
 
             return count;
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Query failed: " + e.getMessage());
             return -1;
         }
     }
 
     //creates view
-    public boolean createViewForSongArtists(){
+    public boolean createViewForSongArtists() {
 
-        try(Statement statement = conn.createStatement()){
+        try (Statement statement = conn.createStatement()) {
 
             statement.execute(CREATE_ARTIST_FOR_SONG_VIEW);
             return true;
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Create View failed: " + e.getMessage());
             return false;
         }
     }
 
     //creates sql of song info
-    public List<SongArtist> querySongInfoView(String title){
+    public List<SongArtist> querySongInfoView(String title) {
 /*
         StringBuilder sb = new StringBuilder(QUERY_VIEW_SONG_INFO);
         sb.append(title);
@@ -360,19 +360,110 @@ public class Datasource {
             querySongInfoView.setString(1, title);
             ResultSet results = querySongInfoView.executeQuery();
 
-                List<SongArtist> songArtists = new ArrayList<>();
-                while (results.next()) {
-                    SongArtist songArtist = new SongArtist();
-                    songArtist.setArtistName(results.getString(1));
-                    songArtist.setAlbumName(results.getString(2));
-                    songArtist.setTrack(results.getInt(3));
-                    songArtists.add(songArtist);
-                }
+            List<SongArtist> songArtists = new ArrayList<>();
+            while (results.next()) {
+                SongArtist songArtist = new SongArtist();
+                songArtist.setArtistName(results.getString(1));
+                songArtist.setAlbumName(results.getString(2));
+                songArtist.setTrack(results.getInt(3));
+                songArtists.add(songArtist);
+            }
 
-                return songArtists;
-        }catch (SQLException e){
+            return songArtists;
+        } catch (SQLException e) {
             System.out.println("Query failed: " + e.getMessage());
             return null;
         }
     }
+
+    private int insertArtist(String name) throws SQLException {
+        // querying artist table to see if the artist already exists.
+
+        queryArtist.setString(1, name);
+        ResultSet results = queryArtist.executeQuery();
+        if (results.next()) {
+            return results.getInt(1);       //if artist exists, then id number would be returned
+        } else {
+            // Insert the artist
+            insertIntoArtists.setString(1, name);
+            int affectedRows = insertIntoArtists.executeUpdate();
+
+            if (affectedRows != 1) {
+                throw new SQLException("Couldn't insert artist!");
+            }
+
+            ResultSet generatedKeys = insertIntoArtists.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt(1);
+            } else {
+                throw new SQLException("Couldn't get _id for artist");
+            }
+        }
+    }
+
+    private int insertAlbum(String name, int artistId) throws SQLException {
+        // querying album table to see if the album already exists.
+
+        queryAlbum.setString(1, name);
+        ResultSet results = queryAlbum.executeQuery();
+        if (results.next()) {
+            return results.getInt(1);       //if album exists, then id number would be returned
+        } else {
+            // Insert the album
+            insertIntoAlbums.setString(1, name);
+            insertIntoAlbums.setInt(2, artistId);
+            int affectedRows = insertIntoAlbums.executeUpdate();
+
+            if (affectedRows != 1) {
+                throw new SQLException("Couldn't insert album!");
+            }
+
+            ResultSet generatedKeys = insertIntoAlbums.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt(1);
+            } else {
+                throw new SQLException("Couldn't get _id for album");
+            }
+        }
+    }
+
+    public void insertSong(String title, String artist, String album, int track) {
+
+        try {
+            conn.setAutoCommit(false);
+
+            int artistId = insertArtist(artist);
+            int albumId = insertAlbum(album, artistId);
+            insertIntoSongs.setInt(1, track);
+            insertIntoSongs.setString(2, title);
+            insertIntoSongs.setInt(3, albumId);
+
+            int affectedRows = insertIntoSongs.executeUpdate();
+
+            if (affectedRows == 1) {
+                conn.commit();
+            } else {
+                throw new SQLException("The song insert failed");
+            }
+
+        } catch (
+                SQLException e) {
+            System.out.println("Insert song exception: " + e.getMessage());
+            try {
+                System.out.println("Performing rollback");
+                conn.rollback();
+            } catch (SQLException e2) {
+                System.out.println("Oh boy! Things are really bad! " + e2.getMessage());
+            }
+        } finally {
+            try {
+                System.out.println("Resetting default commit behavior");
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto-commit! " + e.getMessage());
+            }
+        }
+    }
+
+
 }
