@@ -187,6 +187,11 @@ public class Datasource {
 
             //returns all artist records with all column values.
             while (results.next()) {
+                try {
+                    Thread.sleep(20);
+                }catch (InterruptedException e){
+                    System.out.println("Interrupted: " + e.getMessage());
+                }
                 Artist artist = new Artist();
                 artist.setId(results.getInt(INDEX_ARTIST_ID));
                 artist.setName(results.getString(INDEX_ARTIST_NAME));
