@@ -1,12 +1,12 @@
-package sample;
+package academy.learnprogramming.ui;
 
+import academy.learnprogramming.db.Datasource;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sample.model.Datasource;
 
 public class Main extends Application {
 

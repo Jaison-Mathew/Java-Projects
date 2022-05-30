@@ -1,7 +1,4 @@
-package sample.model;
-
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+package academy.learnprogramming.common;
 
 /**
  * Created by timbuchalka on 9/12/16.

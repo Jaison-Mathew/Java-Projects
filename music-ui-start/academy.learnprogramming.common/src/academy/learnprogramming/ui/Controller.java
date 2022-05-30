@@ -1,4 +1,4 @@
-package sample;
+package academy.learnprogramming.ui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
