@@ -7,5 +7,8 @@ public class Main {
         double milesDriven = 1000d;
         int customers = 50;
         char lastKey = 'd';
+
+        double kilometers = (100d * 1.603944d);
+        
     }
 }
