@@ -8,12 +8,15 @@ public class Methods {
         calculateScore(true, 10000, 8, 200);
     }
 
-    public static void calculateScore(boolean isGameOver, int score, int levelCompleted, int bonus) {
+    public static int calculateScore(boolean isGameOver, int score, int levelCompleted, int bonus) {
 
         if(isGameOver) {
             int finalScore = score + (levelCompleted * bonus);
             finalScore += 2000;
             System.out.println("Your final score was " + finalScore);
+            return finalScore;
+        }else {
+            return -1;
         }
     }
 }
