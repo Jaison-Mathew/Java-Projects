@@ -8,7 +8,7 @@ public class Methods {
         int levelCompleted = 5;
         int bonus = 100;
 
-        calculateScore();
+        calculateScore(true, 800, levelCompleted, bonus);
 
         score = 10000;
         levelCompleted = 8;
@@ -20,11 +20,7 @@ public class Methods {
         }
     }
 
-    public static void calculateScore() {
-        boolean isGameOver = true;
-        int score = 800;
-        int levelCompleted = 5;
-        int bonus = 100;
+    public static void calculateScore(boolean isGameOver, int score, int levelCompleted, int bonus) {
 
         if(isGameOver) {
             int finalScore = score + (levelCompleted * bonus);
